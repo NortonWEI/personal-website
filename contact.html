@@ -19,6 +19,7 @@
     <!-- Theme Style -->
     <link rel="stylesheet" href="css/style.css">
   </head>
+
   <body>
     
     <div class="site-wrap">
@@ -48,26 +49,31 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
       <main>
         <a href="index.html" class="home-button"><span class="fa fa-home"></span></a>
         <h1 class="mb-5">Contact Me</h1>
-        <form action="#" method="post">
+        <form id="msgForm" action="./contact.html" method="post">
             
           <div class="row mb-4">
             <div class="col-md-12">
-              <input type="text" class="form-control" placeholder="Full Name">
+              <input name="name" type="text" class="form-control" placeholder="Full Name" required="true">
             </div>
           </div>
           <div class="row mb-4">
             <div class="col-md-12">
-              <input type="text" class="form-control" placeholder="Email Address">
+              <input name="email" type="text" class="form-control" placeholder="Email Address" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" title="Please enter a valid email address." required="true">
             </div>
           </div>
           <div class="row mb-4">
             <div class="col-md-12">
-              <input type="text" class="form-control" placeholder="Phone">
+              <input name="phone" type="text" class="form-control" placeholder="Phone" pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="Please enter a valid phone number." required="true">
             </div>
           </div>
           <div class="row mb-4">
             <div class="col-md-12">
-              <textarea name="#" id="" class="form-control" placeholder="Write your enquires" cols="30" rows="10"></textarea>
+              <input name="title" type="text" class="form-control" placeholder="Message Title" required="true">
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <textarea name="content" id="" class="form-control" placeholder="Write the details" cols="30" rows="10" required="true"></textarea>
             </div>
           </div>
           <div class="row">
@@ -75,7 +81,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
               <input type="submit" class="btn btn-primary btn-block" value="Send Message">
             </div>
           </div>
-          
           
         </form>
         
@@ -91,7 +96,40 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.waypoints.min.js"></script>
     <script src="js/jquery.countdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src="js/main.js"></script>
+
+    <script type="text/javascript">
+        
+        $('#msgForm').on('submit', function (e) {
+          e.preventDefault();
+
+          $.ajax({
+            type: 'post',
+            url: 'send_message.php',
+            data: $('#msgForm').serialize(),
+            success: function (msg) {
+              Swal.fire({
+                type: 'success',
+                title: 'Thank You',
+                text: 'Your message has been sent and well received.',
+                confirmButtonColor: '#f96982'
+              }).then((result) => {
+                location.reload();
+              }) 
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+              Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong. Please try again later.',
+                confirmButtonColor: '#f96982',
+              })
+            }
+          });
+
+        });
+    </script>
 
   </body>
 </html>
